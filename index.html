@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pipekit.dev — recipes for the pipekit runner</title>
+  <meta name="description" content="Discover recipes for pipekit — the self-hosted cousin of Anthropic's Managed Agents. Browse @pipekit/* and community-published recipes.">
+
+  <link rel="preconnect" href="https://altack.github.io">
+  <link rel="preconnect" href="https://raw.githubusercontent.com">
+
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fg: #111;
+      --bg: #fafafa;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --accent: #2563eb;
+      --code-bg: #f3f4f6;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fg: #e5e7eb;
+        --bg: #0a0a0a;
+        --muted: #9ca3af;
+        --line: #1f2937;
+        --accent: #60a5fa;
+        --code-bg: #111827;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+    }
+    code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
+    pre code { background: transparent; padding: 0; }
+
+    header {
+      max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem 1.5rem;
+    }
+    header h1 { margin: 0 0 0.25rem; font-size: 1.6rem; letter-spacing: -0.01em; }
+    header p { margin: 0; color: var(--muted); }
+    header nav { margin-top: 1.25rem; }
+    header nav a { margin-right: 1rem; }
+
+    main { max-width: 960px; margin: 0 auto; padding: 1rem 1.5rem 4rem; }
+
+    .toolbar { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; align-items: center; flex-wrap: wrap; }
+    .toolbar input {
+      flex: 1; min-width: 200px;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--line); border-radius: 6px;
+      background: var(--bg); color: var(--fg);
+      font: inherit;
+    }
+    .toolbar select {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--line); border-radius: 6px;
+      background: var(--bg); color: var(--fg);
+      font: inherit;
+    }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+
+    .grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+    .card {
+      border: 1px solid var(--line); border-radius: 8px;
+      padding: 1rem 1.1rem;
+      background: var(--bg);
+      display: block;
+      color: inherit;
+    }
+    .card:hover { border-color: var(--accent); text-decoration: none; }
+    .card h3 { margin: 0 0 0.25rem; font-size: 1.05rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .card .desc { color: var(--muted); margin: 0.25rem 0 0.5rem; font-size: 0.92rem; }
+    .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .badge {
+      font-size: 0.72rem; padding: 0.15rem 0.5rem; border-radius: 999px;
+      background: var(--code-bg); color: var(--muted);
+      border: 1px solid var(--line);
+    }
+    .badge.canonical { color: var(--accent); border-color: var(--accent); }
+
+    .detail h2 { margin: 0 0 0.25rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .detail .desc { color: var(--muted); margin: 0 0 1.5rem; }
+    .detail h3 { margin: 1.75rem 0 0.5rem; font-size: 1rem; }
+    .detail dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; margin: 0; }
+    .detail dt { color: var(--muted); }
+    .detail dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }
+
+    .back { display: inline-block; margin-bottom: 1rem; color: var(--muted); }
+
+    footer {
+      max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem;
+      color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line);
+    }
+
+    .empty, .error {
+      padding: 2rem; text-align: center; color: var(--muted);
+      border: 1px dashed var(--line); border-radius: 8px;
+    }
+    .error { color: #dc2626; border-color: #dc2626; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>pipekit.dev</h1>
+    <p>Recipes for the <a href="https://github.com/altack/pipekit">pipekit</a> CI runner — submit a task, get a structured verdict.</p>
+    <nav>
+      <a href="https://github.com/altack/pipekit">Runner</a>
+      <a href="https://github.com/altack/pipekit-recipes">Recipes repo</a>
+      <a href="https://github.com/altack/pipekit/blob/main/docs/recipe.spec.md">Recipe spec</a>
+    </nav>
+  </header>
+
+  <main id="app"><p class="meta">Loading recipes…</p></main>
+
+  <footer>
+    Index sourced from <a id="index-link" href="https://altack.github.io/pipekit-recipes/index.json">altack.github.io/pipekit-recipes/index.json</a>.
+    Built by the indexer at <span id="generated-at">—</span>.
+  </footer>
+
+  <script type="module">
+    const INDEX_URL = "https://altack.github.io/pipekit-recipes/index.json";
+    const app = document.getElementById("app");
+    const generatedAt = document.getElementById("generated-at");
+
+    const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+
+    let INDEX = null;
+
+    async function loadIndex() {
+      const r = await fetch(INDEX_URL, { cache: "no-cache" });
+      if (!r.ok) throw new Error(`fetch index: ${r.status}`);
+      INDEX = await r.json();
+      generatedAt.textContent = new Date(INDEX.generated_at).toLocaleString();
+    }
+
+    function renderList() {
+      const recipes = INDEX.recipes;
+      const publishers = new Map(INDEX.publishers.map((p) => [p.repo, p]));
+      const params = new URLSearchParams(window.location.hash.replace(/^#\/?/, ""));
+      const q = (params.get("q") ?? "").toLowerCase();
+      const tag = params.get("tag") ?? "";
+
+      const filtered = recipes.filter((r) => {
+        if (tag && !(r.tags || []).includes(tag)) return false;
+        if (!q) return true;
+        const hay = [r.id, r.description, ...(r.tags || [])].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+
+      const allTags = [...new Set(recipes.flatMap((r) => r.tags || []))].sort();
+
+      app.innerHTML = `
+        <div class="toolbar">
+          <input id="q" type="search" placeholder="Search recipes…" value="${escape(q)}">
+          <select id="tag">
+            <option value="">All tags</option>
+            ${allTags.map((t) => `<option value="${escape(t)}"${t === tag ? " selected" : ""}>${escape(t)}</option>`).join("")}
+          </select>
+          <span class="meta">${filtered.length} of ${recipes.length} recipes · ${INDEX.publishers.length} publisher(s)</span>
+        </div>
+        ${filtered.length === 0
+          ? `<div class="empty">No recipes match.</div>`
+          : `<div class="grid">${filtered.map((r) => {
+              const pub = publishers.get(r.source.repo);
+              return `<a class="card" href="#/r/${encodeURIComponent(r.id)}">
+                <h3>${escape(r.id)} <span class="meta">v${escape(r.version)}</span></h3>
+                <p class="desc">${escape(r.description.split("\n")[0])}</p>
+                <div class="badges">
+                  ${(r.agents_preferred || []).map((a) => `<span class="badge">${escape(a)}</span>`).join("")}
+                  ${(r.tags || []).map((t) => `<span class="badge">#${escape(t)}</span>`).join("")}
+                  ${pub?.canonical ? `<span class="badge canonical">canonical</span>` : ""}
+                </div>
+              </a>`;
+            }).join("")}</div>`
+        }
+      `;
+
+      const qEl = document.getElementById("q");
+      const tagEl = document.getElementById("tag");
+      const updateHash = () => {
+        const p = new URLSearchParams();
+        if (qEl.value) p.set("q", qEl.value);
+        if (tagEl.value) p.set("tag", tagEl.value);
+        window.location.hash = p.toString() ? `#?${p}` : "#";
+      };
+      qEl.addEventListener("input", updateHash);
+      tagEl.addEventListener("change", updateHash);
+    }
+
+    async function renderDetail(id) {
+      const r = INDEX.recipes.find((x) => x.id === id);
+      if (!r) { app.innerHTML = `<a class="back" href="#">← back</a><div class="error">Recipe not found: ${escape(id)}</div>`; return; }
+      const pub = INDEX.publishers.find((p) => p.repo === r.source.repo);
+      const ghaSnippet = `- uses: altack/pipekit-action@main
+  with:
+    recipe: '${r.id}'
+    inputs: |
+      {}`;
+      const glabSnippet = `include:
+  - remote: 'https://raw.githubusercontent.com/altack/pipekit/main/gitlab/v1.yml'
+pipekit:
+  variables:
+    PIPEKIT_RECIPE: '${r.id}'
+    PIPEKIT_INPUTS: '{}'`;
+
+      app.innerHTML = `
+        <a class="back" href="#">← all recipes</a>
+        <section class="detail">
+          <h2>${escape(r.id)} <span class="meta">v${escape(r.version)}</span></h2>
+          <p class="desc">${escape(r.description)}</p>
+
+          <div class="badges">
+            ${(r.agents_preferred || []).map((a) => `<span class="badge">${escape(a)}</span>`).join("")}
+            ${(r.tags || []).map((t) => `<span class="badge">#${escape(t)}</span>`).join("")}
+            ${pub?.canonical ? `<span class="badge canonical">canonical</span>` : ""}
+          </div>
+
+          <h3>GitHub Actions</h3>
+          <pre><code>${escape(ghaSnippet)}</code></pre>
+
+          <h3>GitLab CI</h3>
+          <pre><code>${escape(glabSnippet)}</code></pre>
+
+          <h3>Inputs schema</h3>
+          ${r.inputs_schema
+            ? `<pre><code>${escape(JSON.stringify(r.inputs_schema, null, 2))}</code></pre>`
+            : `<p class="meta">No inputs schema declared.</p>`}
+
+          <h3>Source</h3>
+          <dl>
+            <dt>Repo</dt><dd><a href="https://github.com/${escape(r.source.repo)}">${escape(r.source.repo)}</a></dd>
+            <dt>Path</dt><dd>${escape(r.source.path)}</dd>
+            <dt>Ref</dt><dd>${escape(r.source.ref)} <span class="meta">(${escape(r.source.sha.slice(0, 7))})</span></dd>
+            <dt>recipe.yaml</dt><dd><a href="${escape(r.links.recipe_yaml)}">raw</a> · <a href="${escape(r.links.tree)}">tree</a></dd>
+            <dt>prompt.md</dt><dd><a href="${escape(r.links.prompt_md)}">raw</a></dd>
+          </dl>
+
+          <h3>Required env</h3>
+          ${r.requires.env.length
+            ? `<ul>${r.requires.env.map((e) => `<li><code>${escape(e)}</code></li>`).join("")}</ul>`
+            : `<p class="meta">None.</p>`}
+
+          ${r.requires.mounts.length
+            ? `<h3>Required mounts</h3><ul>${r.requires.mounts.map((m) => `<li><code>${escape(m)}</code></li>`).join("")}</ul>`
+            : ""}
+        </section>
+      `;
+    }
+
+    function route() {
+      const hash = window.location.hash;
+      const m = hash.match(/^#\/r\/(.+)$/);
+      if (m) renderDetail(decodeURIComponent(m[1]));
+      else renderList();
+    }
+
+    window.addEventListener("hashchange", route);
+
+    loadIndex().then(route).catch((e) => {
+      app.innerHTML = `<div class="error">Failed to load index: ${escape(e.message)}<br>(The indexer may not have completed its first run yet.)</div>`;
+    });
+  </script>
+</body>
+</html>
