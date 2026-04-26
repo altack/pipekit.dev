@@ -211,7 +211,7 @@
       const r = INDEX.recipes.find((x) => x.id === id);
       if (!r) { app.innerHTML = `<a class="back" href="#">← back</a><div class="error">Recipe not found: ${escape(id)}</div>`; return; }
       const pub = INDEX.publishers.find((p) => p.repo === r.source.repo);
-      const ghaSnippet = `- uses: altack/pipekit-action@main
+      const ghaSnippet = `- uses: altack/pipekit/action@main
   with:
     recipe: '${r.id}'
     inputs: |
